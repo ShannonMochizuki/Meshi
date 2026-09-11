@@ -77,3 +77,20 @@ You can upload the folder to a GitHub repository and deploy it using GitHub Page
 - Old Recipe Quest caches are deleted automatically.
 - Page navigation uses network-first loading so newly deployed builds appear after refresh.
 - Verified female avatar assets and v2.2 version label are present in the package.
+
+## v2.3 deployment packaging fix
+
+This ZIP is FLAT. `index.html` is at the ZIP root.
+
+When updating an existing repository, replace the old root files:
+- index.html
+- app.js
+- styles.css
+- sw.js
+- manifest.webmanifest
+- icon.svg
+- assets/
+
+Do not upload these files into a new `recipe_quest_app` subfolder unless your hosting root is configured to that folder.
+
+The current running version is also shown in the top-right of the app header as `v2.3`.

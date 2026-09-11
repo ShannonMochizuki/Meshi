@@ -198,14 +198,20 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   .character-full{height:225px}
 }
 
-.version-label{
-  position:fixed;
-  right:max(10px, calc((100vw - 860px)/2 + 10px));
-  bottom:calc(76px + env(safe-area-inset-bottom));
-  z-index:19;
-  font-size:.62rem;
-  letter-spacing:.04em;
-  color:rgba(104,115,110,.58);
-  pointer-events:none;
-  user-select:none;
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.top-version{
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:rgba(47,107,79,.58);
+  background:rgba(233,241,235,.7);
+  border:1px solid rgba(217,226,216,.7);
+  border-radius:999px;
+  padding:4px 7px;
+  line-height:1;
 }

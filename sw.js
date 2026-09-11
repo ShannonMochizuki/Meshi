@@ -1,20 +1,18 @@
-const CACHE = "recipe-quest-v2-2";
+const CACHE = "recipe-quest-v2-3";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.2",
-  "./app.js?v=2.2",
-  "./manifest.webmanifest?v=2.2",
-  "./icon.svg?v=2.2",
-  "./assets/female-avatar-full.jpg?v=2.2",
-  "./assets/female-avatar-bust.jpg?v=2.2"
+  "./styles.css?v=2.3",
+  "./app.js?v=2.3",
+  "./manifest.webmanifest?v=2.3",
+  "./icon.svg?v=2.3",
+  "./assets/female-avatar-full.jpg?v=2.3",
+  "./assets/female-avatar-bust.jpg?v=2.3"
 ];
 
 self.addEventListener("install", event => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
-  );
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
 });
 
 self.addEventListener("activate", event => {
@@ -30,11 +28,9 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  const request = event.request;
-
-  if (request.mode === "navigate") {
+  if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(request)
+      fetch(event.request, { cache: "no-store" })
         .then(response => {
           const copy = response.clone();
           caches.open(CACHE).then(cache => cache.put("./index.html", copy));
@@ -46,15 +42,14 @@ self.addEventListener("fetch", event => {
   }
 
   event.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) return cached;
-      return fetch(request).then(response => {
-        if (request.method === "GET" && response.ok) {
+    fetch(event.request)
+      .then(response => {
+        if (event.request.method === "GET" && response.ok) {
           const copy = response.clone();
-          caches.open(CACHE).then(cache => cache.put(request, copy));
+          caches.open(CACHE).then(cache => cache.put(event.request, copy));
         }
         return response;
-      });
-    })
+      })
+      .catch(() => caches.match(event.request))
   );
 });
