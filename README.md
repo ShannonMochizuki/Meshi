@@ -1,0 +1,62 @@
+# Recipe Quest
+
+A local-first installable PWA that combines a personal recipe library with a cozy health-powered RPG loop.
+
+## Included in v1
+
+- Recipe library with search, favourites, ingredients, steps, notes and tags
+- Automatic Health Point and coin rewards based on health qualities
+- Meal logging
+- Adventure quests gated by Health Points or healthy meal types
+- Coins and cosmetic shop
+- Inventory / collection
+- Local save data
+- Save export
+- Installable PWA + offline cache
+- No account, backend or API required
+
+## Health scoring in this prototype
+
+Positive:
+- Vegetables +3
+- Fruit +2
+- Protein +3
+- Whole grains +2
+- Minimally processed +3
+
+Negative:
+- High added sugar -2
+- Deep fried -2
+
+Score is capped between 0 and 10 and maps to HP/coin rewards.
+
+This is intentionally a gentle reward system. Less nutritious meals are not punished with negative points.
+
+## Run locally
+
+Because it uses a service worker, run it through a simple local web server rather than opening `index.html` directly.
+
+Python:
+```bash
+python -m http.server 8080
+```
+
+Then open:
+`http://localhost:8080`
+
+## Deploy
+
+You can upload the folder to a GitHub repository and deploy it using GitHub Pages, Netlify, Vercel or any static host.
+
+## Suggested v2
+
+- Ingredient pantry and "What can I cook?"
+- Serving-size scaler
+- Shopping list
+- Weekly variety quests
+- Recipe version history
+- Image uploads
+- Nutrition data / optional nutrition API
+- Supabase account sync
+- Shared household profile for Ben + Shan
+- Larger branching adventure map

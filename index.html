@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#183a2b" />
+  <meta name="description" content="A cozy recipe library where healthy meals power your adventure." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Recipe Quest</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">RECIPE QUEST</p>
+        <h1 id="pageTitle">Home</h1>
+      </div>
+      <button class="icon-btn" id="installBtn" hidden title="Install app">⬇️</button>
+    </header>
+
+    <main id="view"></main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button data-route="home" class="nav-btn active"><span>🏠</span><small>Home</small></button>
+      <button data-route="recipes" class="nav-btn"><span>📖</span><small>Recipes</small></button>
+      <button data-route="adventure" class="nav-btn"><span>⚔️</span><small>Adventure</small></button>
+      <button data-route="collection" class="nav-btn"><span>🎒</span><small>Collection</small></button>
+      <button data-route="profile" class="nav-btn"><span>👤</span><small>Profile</small></button>
+    </nav>
+  </div>
+
+  <dialog id="modal">
+    <form method="dialog" class="modal-shell" id="modalContent"></form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

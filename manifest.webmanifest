@@ -1,0 +1,17 @@
+{
+  "name": "Recipe Quest",
+  "short_name": "RecipeQuest",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f3ea",
+  "theme_color": "#183a2b",
+  "description": "A cozy recipe library where healthy meals power your adventure.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
