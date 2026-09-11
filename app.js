@@ -5,7 +5,7 @@ const modal = $("#modal");
 const modalContent = $("#modalContent");
 
 const seed = {
-  profile: { name: "Ben", hp: 0, coins: 40, streak: 0, mealsLogged: 0, lastMealDate: null },
+  profile: { name: "Ben", avatar: "female", hp: 0, coins: 40, streak: 0, mealsLogged: 0, lastMealDate: null },
   recipes: [
     {
       id: crypto.randomUUID(),
@@ -115,7 +115,10 @@ let state = loadState();
 function loadState(){
   try{
     const s = localStorage.getItem("recipeQuestStateV1");
-    return s ? JSON.parse(s) : structuredClone(seed);
+    const loaded = s ? JSON.parse(s) : structuredClone(seed);
+    loaded.profile = loaded.profile || structuredClone(seed.profile);
+    if(!loaded.profile.avatar) loaded.profile.avatar = "female";
+    return loaded;
   }catch{
     return structuredClone(seed);
   }
@@ -162,12 +165,18 @@ function renderHome(){
   const q=currentAdventure();
   const recent=[...state.history].slice(-3).reverse();
   view.innerHTML=`
-    <section class="card hero">
-      <p class="muted">Good evening, ${esc(state.profile.name)}</p>
-      <h2>Real meals. Real progress.</h2>
-      <div class="stat-row">
-        <div class="stat-pill"><span>🥕 Health Points</span><strong>${state.profile.hp}</strong></div>
-        <div class="stat-pill"><span>🪙 Coins</span><strong>${state.profile.coins}</strong></div>
+    <section class="card hero hero-with-avatar">
+      <div class="hero-copy">
+        <p class="muted">Good evening, ${esc(state.profile.name)}</p>
+        <h2>Real meals. Real progress.</h2>
+        <p class="hero-flavour">Your cook-adventurer grows stronger as you build healthier meals.</p>
+        <div class="stat-row">
+          <div class="stat-pill"><span>🥕 Health Points</span><strong>${state.profile.hp}</strong></div>
+          <div class="stat-pill"><span>🪙 Coins</span><strong>${state.profile.coins}</strong></div>
+        </div>
+      </div>
+      <div class="hero-avatar-wrap" aria-label="Main character avatar">
+        <img class="hero-avatar" src="assets/female-avatar-bust.jpg" alt="Soft and friendly female cook avatar">
       </div>
     </section>
 
@@ -420,6 +429,19 @@ function buyItem(id){
 }
 function renderProfile(){
   view.innerHTML=`
+    <section class="card character-card">
+      <div class="character-full-wrap">
+        <img class="character-full" src="assets/female-avatar-full.jpg" alt="Female main character avatar">
+      </div>
+      <div class="character-info">
+        <span class="badge">MAIN CHARACTER</span>
+        <h2>${esc(state.profile.name)}</h2>
+        <p class="muted">Soft & Friendly Cook</p>
+        <p>Your avatar represents you inside Recipe Quest. Healthy meals power her adventure and unlock new game content.</p>
+        <span class="tag">Female avatar selected</span>
+      </div>
+    </section>
+
     <section class="card">
       <h2>${esc(state.profile.name)}'s Journey</h2>
       <div class="list-row"><span>Meals logged</span><strong>${state.profile.mealsLogged}</strong></div>
@@ -428,10 +450,12 @@ function renderProfile(){
       <div class="list-row"><span>Recipes saved</span><strong>${state.recipes.length}</strong></div>
       <div class="list-row"><span>Quest items</span><strong>${state.inventory.length}</strong></div>
     </section>
+
     <section class="card">
       <h3>Profile name</h3>
       <div class="search-row"><input id="profileName" value="${esc(state.profile.name)}"><button class="btn" onclick="saveProfile()">Save</button></div>
     </section>
+
     <section class="card">
       <h3>Data</h3>
       <p class="muted">This version stores everything locally in your browser/device.</p>

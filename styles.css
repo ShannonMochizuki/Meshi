@@ -132,3 +132,68 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   .two-col{grid-template-columns:1fr}
   .checkbox-grid{grid-template-columns:1fr}
 }
+
+
+/* Main character avatar */
+.hero-with-avatar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 124px;
+  gap:14px;
+  align-items:center;
+  overflow:hidden;
+}
+.hero-copy{min-width:0}
+.hero-flavour{
+  margin:7px 0 0;
+  color:#d8e6de;
+  font-size:.88rem;
+  line-height:1.45;
+}
+.hero-avatar-wrap{
+  width:116px;
+  height:142px;
+  border-radius:26px;
+  overflow:hidden;
+  justify-self:end;
+  background:#f3ecdf;
+  border:2px solid rgba(255,255,255,.2);
+  box-shadow:0 9px 24px rgba(0,0,0,.16);
+}
+.hero-avatar{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 18%;
+  display:block;
+}
+.character-card{
+  display:grid;
+  grid-template-columns:180px minmax(0,1fr);
+  gap:18px;
+  align-items:center;
+  overflow:hidden;
+}
+.character-full-wrap{
+  background:linear-gradient(145deg,#efe8d9,#f9f5ea);
+  border-radius:22px;
+  min-height:280px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+.character-full{
+  width:100%;
+  height:310px;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+}
+.character-info h2{margin:8px 0 2px}
+@media (max-width:560px){
+  .hero-with-avatar{grid-template-columns:minmax(0,1fr) 96px}
+  .hero-avatar-wrap{width:92px;height:116px;border-radius:20px}
+  .character-card{grid-template-columns:118px minmax(0,1fr);gap:13px}
+  .character-full-wrap{min-height:210px}
+  .character-full{height:225px}
+}
