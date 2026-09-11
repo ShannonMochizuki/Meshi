@@ -215,3 +215,120 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   padding:4px 7px;
   line-height:1;
 }
+
+
+/* v2.5 Adventure encounter + battle */
+.encounter-card{
+  display:grid;
+  grid-template-columns:180px minmax(0,1fr);
+  gap:16px;
+  align-items:center;
+}
+.encounter-image-wrap{
+  background:linear-gradient(145deg,#fff1f1,#f6e8dc);
+  border-radius:20px;
+  overflow:hidden;
+  min-height:170px;
+}
+.encounter-image{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+.encounter-copy h3{margin:7px 0 4px;font-size:1.35rem}
+
+.battle-screen{padding-bottom:12px}
+.battle-topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.battle-arena{
+  padding:14px;
+  background:linear-gradient(180deg,#fff8f2,#f3efe1);
+}
+.enemy-panel,.player-panel{padding:4px}
+.battle-name-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.battle-name-row h2{margin:1px 0 8px}
+.battle-hp-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:.8rem;
+  margin-top:4px;
+}
+.battle-hp{
+  height:12px;
+  background:#dddcd5;
+  border-radius:99px;
+  overflow:hidden;
+  margin:6px 0 12px;
+}
+.battle-hp>div{height:100%;transition:width .2s ease}
+.enemy-hp>div{background:#c76060}
+.player-hp>div{background:#4f8c68}
+.battle-monster{
+  width:min(100%,360px);
+  height:240px;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  margin:0 auto;
+  border-radius:18px;
+}
+.battle-player-wrap{
+  width:122px;
+  height:138px;
+  border-radius:22px;
+  overflow:hidden;
+  margin:8px auto 0;
+  background:#efe5d6;
+  border:1px solid var(--line);
+}
+.battle-player{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 18%;
+}
+.battle-divider{
+  text-align:center;
+  font-weight:900;
+  color:var(--muted);
+  letter-spacing:.12em;
+  margin:8px 0;
+}
+.battle-move{text-align:center;margin:10px 0 4px}
+.battle-actions{display:grid;gap:9px}
+.battle-action{
+  border:1px solid var(--line);
+  background:#f8f6ef;
+  color:var(--ink);
+  border-radius:16px;
+  padding:12px;
+  text-align:left;
+}
+.battle-action strong{display:block;margin-bottom:3px}
+.battle-action span{font-size:.8rem;color:var(--muted)}
+.battle-action:hover{background:var(--soft)}
+.locked-action{opacity:.5}
+.battle-log p{
+  margin:7px 0;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#f7f6ef;
+  font-size:.88rem;
+}
+
+@media (max-width:560px){
+  .encounter-card{grid-template-columns:110px minmax(0,1fr);gap:12px}
+  .encounter-image{height:150px}
+  .battle-monster{height:210px}
+}

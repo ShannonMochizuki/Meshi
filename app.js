@@ -107,7 +107,12 @@ const seed = {
     { id:"s5", name:"Traveler's Cloak", icon:"🧥", price:120 }
   ],
   inventory: [],
-  history: []
+  history: [],
+  game: {
+    discovered: ["sugarling"],
+    defeated: [],
+    battlesWon: 0
+  }
 };
 
 let state = loadState();
@@ -118,6 +123,10 @@ function loadState(){
     const loaded = s ? JSON.parse(s) : structuredClone(seed);
     loaded.profile = loaded.profile || structuredClone(seed.profile);
     if(!loaded.profile.avatar) loaded.profile.avatar = "female";
+    loaded.game = loaded.game || { discovered:["sugarling"], defeated:[], battlesWon:0 };
+    if(!Array.isArray(loaded.game.discovered)) loaded.game.discovered = ["sugarling"];
+    if(!Array.isArray(loaded.game.defeated)) loaded.game.defeated = [];
+    if(typeof loaded.game.battlesWon !== "number") loaded.game.battlesWon = 0;
     return loaded;
   }catch{
     return structuredClone(seed);
@@ -176,7 +185,7 @@ function renderHome(){
         </div>
       </div>
       <div class="hero-avatar-wrap" aria-label="Main character avatar">
-        <img class="hero-avatar" src="female-avatar-bust.jpg?v=2.4" alt="Soft and friendly female cook avatar">
+        <img class="hero-avatar" src="female-avatar-bust.jpg?v=2.5" alt="Soft and friendly female cook avatar">
       </div>
     </section>
 
@@ -382,12 +391,35 @@ function updateQuestProgress(r){
   }
 }
 function renderAdventure(){
+  const defeated = state.game?.defeated?.includes("sugarling");
   view.innerHTML=`
     <section class="card hero">
       <p class="muted">Your real-world meals power this story.</p>
       <h2>🌲 The Verdant Path</h2>
       <p>Restore a quiet world one healthy meal at a time.</p>
     </section>
+
+    <div class="section-title"><h2>Encounters</h2><span class="muted">${state.game?.battlesWon||0} victories</span></div>
+    <section class="card encounter-card">
+      <div class="encounter-image-wrap">
+        <img src="sugarling.jpg?v=2.5" class="encounter-image" alt="Sugarling monster">
+      </div>
+      <div class="encounter-copy">
+        <span class="badge">${defeated ? "DEFEATED" : "NEW ENCOUNTER"}</span>
+        <h3>Sugarling</h3>
+        <p class="muted">Type: Sweets · Element: Sugar</p>
+        <p>A forgotten dessert creature that attacks with crystallised sugar.</p>
+        <div class="reward">
+          <span>⚔️ Battle</span>
+          <span>🪙 25 reward</span>
+        </div>
+        <button class="btn" style="margin-top:12px" onclick="startSugarlingBattle()">
+          ${defeated ? "Battle again" : "Fight Sugarling"}
+        </button>
+      </div>
+    </section>
+
+    <div class="section-title"><h2>Story Quests</h2></div>
     ${state.quests.map((q,i)=>`
       <section class="card quest ${q.completed?"done":""}">
         <div class="list-row" style="border:0;padding-top:0">
@@ -400,6 +432,198 @@ function renderAdventure(){
       </section>`).join("")}
   `;
 }
+
+let activeBattle = null;
+
+function startSugarlingBattle(){
+  activeBattle = {
+    enemyId: "sugarling",
+    enemyName: "Sugarling",
+    enemyHp: 80,
+    enemyMaxHp: 80,
+    playerHp: 100,
+    playerMaxHp: 100,
+    log: ["A wild Sugarling blocks the path!"]
+  };
+  $("#pageTitle").textContent = "Battle";
+  renderBattle();
+}
+
+function renderBattle(){
+  if(!activeBattle){ route("adventure"); return; }
+  const b=activeBattle;
+  const enemyPct=Math.max(0,Math.round((b.enemyHp/b.enemyMaxHp)*100));
+  const playerPct=Math.max(0,Math.round((b.playerHp/b.playerMaxHp)*100));
+  const healthySkillUnlocked=(state.profile.hp||0)>=20;
+
+  view.innerHTML=`
+    <section class="battle-screen">
+      <div class="battle-topline">
+        <button class="btn ghost" onclick="leaveBattle()">← Retreat</button>
+        <span class="badge">DESSERT RUINS</span>
+      </div>
+
+      <section class="card battle-arena">
+        <div class="enemy-panel">
+          <div class="battle-name-row">
+            <div>
+              <span class="muted">Enemy</span>
+              <h2>Sugarling</h2>
+            </div>
+            <span class="tag">Sugar</span>
+          </div>
+          <div class="battle-hp-label"><span>HP</span><strong>${b.enemyHp} / ${b.enemyMaxHp}</strong></div>
+          <div class="battle-hp enemy-hp"><div style="width:${enemyPct}%"></div></div>
+          <img src="sugarling.jpg?v=2.5" class="battle-monster" alt="Sugarling">
+          <p class="battle-move">Signature move: <strong>Sugar Shot</strong></p>
+        </div>
+
+        <div class="battle-divider">VS</div>
+
+        <div class="player-panel">
+          <div class="battle-name-row">
+            <div>
+              <span class="muted">Cook Adventurer</span>
+              <h2>${esc(state.profile.name)}</h2>
+            </div>
+            <span class="tag">Lv. 1</span>
+          </div>
+          <div class="battle-hp-label"><span>HP</span><strong>${b.playerHp} / ${b.playerMaxHp}</strong></div>
+          <div class="battle-hp player-hp"><div style="width:${playerPct}%"></div></div>
+          <div class="battle-player-wrap">
+            <img src="female-avatar-bust.jpg?v=2.5" class="battle-player" alt="Player avatar">
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Battle actions</h3>
+        <div class="battle-actions">
+          <button class="battle-action" onclick="playerAttack('spoon')">
+            <strong>🥄 Spoon Strike</strong>
+            <span>Reliable attack · 12–18 dmg</span>
+          </button>
+          <button class="battle-action ${healthySkillUnlocked?"":"locked-action"}" ${healthySkillUnlocked?"":"disabled"} onclick="playerAttack('fresh')">
+            <strong>🥕 Fresh Power</strong>
+            <span>${healthySkillUnlocked?"Healthy meal skill · 22–30 dmg":"Unlocks at 20 Health Points"}</span>
+          </button>
+          <button class="battle-action" onclick="playerAttack('guard')">
+            <strong>🛡️ Brace</strong>
+            <span>Reduce the next Sugar Shot</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="card battle-log">
+        <h3>Battle log</h3>
+        ${b.log.slice(-5).map(x=>`<p>${esc(x)}</p>`).join("")}
+      </section>
+    </section>
+  `;
+}
+
+function playerAttack(kind){
+  if(!activeBattle) return;
+  const b=activeBattle;
+  let guarding=false;
+
+  if(kind==="spoon"){
+    const dmg=12+Math.floor(Math.random()*7);
+    b.enemyHp=Math.max(0,b.enemyHp-dmg);
+    b.log.push(`You strike Sugarling with your wooden spoon for ${dmg} damage.`);
+  }else if(kind==="fresh"){
+    if((state.profile.hp||0)<20) return;
+    const dmg=22+Math.floor(Math.random()*9);
+    b.enemyHp=Math.max(0,b.enemyHp-dmg);
+    b.log.push(`Fresh Power bursts forward for ${dmg} damage!`);
+  }else if(kind==="guard"){
+    guarding=true;
+    b.log.push("You brace yourself for Sugarling's next attack.");
+  }
+
+  if(b.enemyHp<=0){
+    winSugarlingBattle();
+    return;
+  }
+
+  const base=10+Math.floor(Math.random()*9);
+  const dmg=guarding ? Math.ceil(base/2) : base;
+  b.playerHp=Math.max(0,b.playerHp-dmg);
+  b.log.push(`Sugarling fires Sugar Shot for ${dmg} damage.`);
+
+  if(b.playerHp<=0){
+    loseSugarlingBattle();
+    return;
+  }
+
+  renderBattle();
+}
+
+function winSugarlingBattle(){
+  const firstWin=!state.game.defeated.includes("sugarling");
+  state.game.defeated = Array.from(new Set([...state.game.defeated,"sugarling"]));
+  state.game.battlesWon=(state.game.battlesWon||0)+1;
+  const coinReward=firstWin?25:8;
+  state.profile.coins+=coinReward;
+  if(firstWin){
+    state.inventory.push({
+      id:"sugarling-spoon",
+      name:"Sugarling's Wooden Spoon",
+      icon:"🥄",
+      source:"Sugarling encounter"
+    });
+  }
+  save();
+
+  modalContent.innerHTML=`
+    <div style="text-align:center;padding:12px 4px">
+      <div style="font-size:4rem">🏆</div>
+      <h2>Sugarling defeated!</h2>
+      <p>You survived the Sugar Shot barrage.</p>
+      <div class="reward" style="justify-content:center">
+        <span>+${coinReward} 🪙</span>
+        ${firstWin?`<span>🥄 Wooden Spoon</span>`:""}
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeBattleVictory()">Continue</button>
+      </div>
+    </div>`;
+  modal.showModal();
+}
+
+function loseSugarlingBattle(){
+  modalContent.innerHTML=`
+    <div style="text-align:center;padding:12px 4px">
+      <div style="font-size:4rem">💫</div>
+      <h2>Knocked out</h2>
+      <p>Sugarling's sugar crystals were too much this time.</p>
+      <p class="muted">No coins or Health Points are lost.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn secondary" onclick="retrySugarlingBattle()">Try again</button>
+        <button type="button" class="btn" onclick="leaveBattleFromModal()">Retreat</button>
+      </div>
+    </div>`;
+  modal.showModal();
+}
+
+function retrySugarlingBattle(){
+  modal.close();
+  startSugarlingBattle();
+}
+function leaveBattleFromModal(){
+  modal.close();
+  leaveBattle();
+}
+function closeBattleVictory(){
+  modal.close();
+  activeBattle=null;
+  route("adventure");
+}
+function leaveBattle(){
+  activeBattle=null;
+  route("adventure");
+}
+
 function renderCollection(){
   view.innerHTML=`
     <section class="card">
@@ -431,7 +655,7 @@ function renderProfile(){
   view.innerHTML=`
     <section class="card character-card">
       <div class="character-full-wrap">
-        <img class="character-full" src="female-avatar-full.jpg?v=2.4" alt="Female main character avatar">
+        <img class="character-full" src="female-avatar-full.jpg?v=2.5" alt="Female main character avatar">
       </div>
       <div class="character-info">
         <span class="badge">MAIN CHARACTER</span>
@@ -485,6 +709,12 @@ window.logMeal=logMeal;
 window.buyItem=buyItem;
 window.saveProfile=saveProfile;
 window.exportData=exportData;
+window.startSugarlingBattle=startSugarlingBattle;
+window.playerAttack=playerAttack;
+window.retrySugarlingBattle=retrySugarlingBattle;
+window.leaveBattleFromModal=leaveBattleFromModal;
+window.closeBattleVictory=closeBattleVictory;
+window.leaveBattle=leaveBattle;
 window.resetData=resetData;
 
 let deferredPrompt;

@@ -1,4 +1,4 @@
-# Recipe Quest v2.4
+# Recipe Quest v2.5
 
 A local-first installable PWA that combines a personal recipe library with a cozy health-powered RPG loop.
 
@@ -104,3 +104,15 @@ The female avatar JPG files now live in the repository root, matching the curren
 `app.js` and `sw.js` reference those exact root paths.
 
 The version label is hard-coded in the top-right header as `v2.4`.
+
+## v2.5 battle update
+
+- Added a real encounter section inside Adventure.
+- Added Sugarling as the first battle creature.
+- Added playable turn-based combat.
+- Sugarling uses Sugar Shot.
+- Player actions: Spoon Strike, Fresh Power, and Brace.
+- Fresh Power unlocks once the user has 20 Health Points.
+- First Sugarling victory awards 25 coins and Sugarling's Wooden Spoon.
+- Repeat victories award 8 coins.
+- Battle losses do not remove coins or Health Points.
