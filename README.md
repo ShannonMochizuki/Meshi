@@ -67,3 +67,5 @@ You can upload the folder to a GitHub repository and deploy it using GitHub Page
 - Implemented the supplied Soft & Friendly female cook as the main character avatar.
 - Avatar appears on the Home dashboard and Profile/character card.
 - Existing v1 local saves are migrated automatically to use the female avatar.
+
+- v2.1: Added a subtle app version label above the bottom navigation.
