@@ -176,7 +176,7 @@ function renderHome(){
         </div>
       </div>
       <div class="hero-avatar-wrap" aria-label="Main character avatar">
-        <img class="hero-avatar" src="assets/female-avatar-bust.jpg" alt="Soft and friendly female cook avatar">
+        <img class="hero-avatar" src="assets/female-avatar-bust.jpg?v=2.2" alt="Soft and friendly female cook avatar">
       </div>
     </section>
 
@@ -431,7 +431,7 @@ function renderProfile(){
   view.innerHTML=`
     <section class="card character-card">
       <div class="character-full-wrap">
-        <img class="character-full" src="assets/female-avatar-full.jpg" alt="Female main character avatar">
+        <img class="character-full" src="assets/female-avatar-full.jpg?v=2.2" alt="Female main character avatar">
       </div>
       <div class="character-info">
         <span class="badge">MAIN CHARACTER</span>

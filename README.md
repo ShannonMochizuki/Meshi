@@ -69,3 +69,11 @@ You can upload the folder to a GitHub repository and deploy it using GitHub Page
 - Existing v1 local saves are migrated automatically to use the female avatar.
 
 - v2.1: Added a subtle app version label above the bottom navigation.
+
+## v2.2 update reliability fix
+
+- Added cache-busting URLs to CSS, JavaScript, manifest, icon and avatar assets.
+- Service worker now activates immediately.
+- Old Recipe Quest caches are deleted automatically.
+- Page navigation uses network-first loading so newly deployed builds appear after refresh.
+- Verified female avatar assets and v2.2 version label are present in the package.
