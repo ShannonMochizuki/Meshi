@@ -1,13 +1,13 @@
-const CACHE = "recipe-quest-v2-3";
+const CACHE = "recipe-quest-v2-4";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.3",
-  "./app.js?v=2.3",
-  "./manifest.webmanifest?v=2.3",
-  "./icon.svg?v=2.3",
-  "./assets/female-avatar-full.jpg?v=2.3",
-  "./assets/female-avatar-bust.jpg?v=2.3"
+  "./styles.css?v=2.4",
+  "./app.js?v=2.4",
+  "./manifest.webmanifest?v=2.4",
+  "./icon.svg?v=2.4",
+  "./female-avatar-full.jpg?v=2.4",
+  "./female-avatar-bust.jpg?v=2.4"
 ];
 
 self.addEventListener("install", event => {

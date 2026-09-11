@@ -1,4 +1,4 @@
-# Recipe Quest v2
+# Recipe Quest v2.4
 
 A local-first installable PWA that combines a personal recipe library with a cozy health-powered RPG loop.
 
@@ -94,3 +94,13 @@ When updating an existing repository, replace the old root files:
 Do not upload these files into a new `recipe_quest_app` subfolder unless your hosting root is configured to that folder.
 
 The current running version is also shown in the top-right of the app header as `v2.3`.
+
+## v2.4 repository-layout fix
+
+The female avatar JPG files now live in the repository root, matching the current GitHub layout:
+- female-avatar-bust.jpg
+- female-avatar-full.jpg
+
+`app.js` and `sw.js` reference those exact root paths.
+
+The version label is hard-coded in the top-right header as `v2.4`.
